@@ -1,0 +1,33 @@
+/* Cloak elements on initial load to hide the possible display of {{ ... }} 
+ * Add to the app tag or to specific tags
+ * To display "loading...", change to the following:
+ *    [v-cloak] > * { display:none }
+ *    [v-cloak]::before { content: "loading…" }
+ */
+[v-cloak] > * { display: none; }
+[v-cloak]::before { content: "loading..." }
+
+:root {
+    --iconHeight: 40px;
+}
+
+/*  Colours for Syntax Highlighted pre's */
+.syntax-highlight {color:white;background-color:black;padding:5px 10px;}
+.syntax-highlight > .key {color:#ffbf35}
+.syntax-highlight > .string {color:#5dff39;}
+.syntax-highlight > .number {color:#70aeff;}
+.syntax-highlight > .boolean {color:#b993ff;}
+
+.svgIcon {
+    height:var(--iconHeight);
+}
+
+.textInlineSvgIcon {
+    font-size: 17px;
+    line-height:var(--iconHeight); 
+    vertical-align: middle;
+}
+
+.company {
+    background-color: #e5ffe0 !important;
+}
