@@ -122,8 +122,8 @@ router.beforeEach((to, from, next) => {
 });
 
 // eslint-disable-next-line no-unused-vars
-var depp1 = new Vue({
-    el: '#depp',
+var app = new Vue({
+    el: '#app',
     router,
     data: {
         startMsg    : 'Vue has started, waiting for messages',
