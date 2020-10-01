@@ -20,9 +20,111 @@
 
 /** @see https://github.com/TotallyInformation/node-red-contrib-uibuilder/wiki/Front-End-Library---available-properties-and-methods */
 
+const eventbus = new EventBus();
+const rooms = { 
+    data: function() {
+        return {
+            name: "Rooms",
+            initiallyLoaded: false,
+        }
+    },
+    props: {
+        eventbus: Object,
+    },
+    created: function(){
+        eventbus.emitEventListeners('action', `{ "type": "refresh", "page": "${name}" }`);
+    },
+    template: `
+<div class="row">
+  <!-- ROOMS -->
+  <room-overview-component 
+    :eventbus="eventbus" 
+    name="Wohnzimmer"   
+    netatmoname="netatmo/Wohnzimmer"
+    iconname="livingroom"></room-overview-component>
+  <room-overview-component 
+    :eventbus="eventbus" 
+    name="Schlafzimmer" 
+    netatmoname="netatmo/Schlafzimmer"
+    iconname="bedroom"></room-overview-component>
+  <room-overview-component 
+    :eventbus="eventbus" 
+    name="Dachboden" 
+    netatmoname="netatmo/Dachgeschoss"
+    iconname="office"></room-overview-component>
+  <room-overview-component 
+    :eventbus="eventbus" 
+    name="Küche"
+    iconname="kitchen"
+    netatmoname="Küche"></room-overview-component>
+  <room-overview-component 
+    :eventbus="eventbus" 
+    name="Gang"
+    iconname="diningroom" ></room-overview-component>
+  <room-overview-component 
+    :eventbus="eventbus" 
+    name="Kinderzimmer"
+    iconname="childrensroom"></room-overview-component>
+</div>` }
+
+const start = {
+    data: function() {
+        return {
+            name: "Start",
+            initiallyLoaded: false,
+        }
+    },
+    props: {
+        eventbus: Object,
+    },
+    created: function(){
+        eventbus.emitEventListeners('action', `{ "type": "refresh", "page": "${name}" }`);
+    },
+    template: `<div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-12">
+        <weather-component :eventbus="eventbus"></weather-component>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+        <calendar-component :eventbus="eventbus"></calendar-component>
+        </div>
+    </div>`
+}
+
+const routes = [
+    { 
+        path: '/',        
+        name: 'Start', 
+        component: start, 
+        props: { 
+            eventbus: eventbus 
+        } 
+    },
+    { 
+        path: '/rooms',   
+        name: 'Rooms', 
+        component: rooms, 
+        props: { 
+            eventbus: eventbus 
+        } 
+    }
+]
+
+const router = new VueRouter({
+    routes // short for `routes: routes`
+})
+
+router.beforeEach((to, from, next) => {
+    console.log(from.name + " -> " + to.name);
+
+    eventbus.emitEventListeners('action', `{ "type": "navigation", "from": "${from.name}", "to": "${to.name}" }`);
+
+    next();
+});
+
 // eslint-disable-next-line no-unused-vars
 var depp1 = new Vue({
     el: '#depp',
+    router,
     data: {
         startMsg    : 'Vue has started, waiting for messages',
         feVersion   : '',
@@ -44,7 +146,7 @@ var depp1 = new Vue({
         msgsCtrlSent: 0,
 
         username:   'Max Dhom',
-        eventbus:   new EventBus(),
+        eventbus:   eventbus,
         rooms:      [],
     }, // --- End of data --- //
     computed: {
@@ -163,11 +265,13 @@ var depp1 = new Vue({
         uibuilder.onChange('ioConnected', function(newVal){
             //console.info('[indexjs:uibuilder.onChange:ioConnected] Socket.IO Connection Status Changed to:', newVal)
             vueApp.socketConnectedState = newVal
+            console.log("UIBilder.onChange(ioConnected): " + newVal);
         })
         // If Server Time Offset changes
         uibuilder.onChange('serverTimeOffset', function(newVal){
             //console.info('[indexjs:uibuilder.onChange:serverTimeOffset] Offset of time between the browser and the server has changed to:', newVal)
             vueApp.serverTimeOffset = newVal
+            console.log("UIBilder.onChange(serverTimeOffset): " + newVal);
         })
 
         vueApp.eventbus.addEventListener("action", function(data){
