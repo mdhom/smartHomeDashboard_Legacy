@@ -80,12 +80,20 @@ const start = {
     created: function(){
         eventbus.emitEventListeners('action', `{ "type": "refresh", "page": "${name}" }`);
     },
-    template: `<div class="row">
-        <div class="col-md-6 col-sm-6 col-xs-12">
-        <weather-component :eventbus="eventbus"></weather-component>
+    template: `
+    <div>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <weather-component :eventbus="eventbus"></weather-component>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <calendar-component :eventbus="eventbus"></calendar-component>
+            </div>
         </div>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-        <calendar-component :eventbus="eventbus"></calendar-component>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <tasks-component :eventbus="eventbus"></tasks-component>
+            </div>
         </div>
     </div>`
 }
