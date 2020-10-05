@@ -1,7 +1,8 @@
 Vue.component('shopping-component', {
     data: function() {
         return {
-            items: []
+            purchase: [],
+            recently: [],
         }
     },
     props: {
@@ -16,7 +17,8 @@ Vue.component('shopping-component', {
         const comp = this;
 
         this.eventbus.addEventListener("shoppingItems", function(data){
-            comp.items = data.payload;
+            comp.purchase = data.payload.purchase;
+            comp.recently = data.payload.recently;
         }); 
     },
     template: `
@@ -36,16 +38,41 @@ Vue.component('shopping-component', {
         </div>
         <div class="x_content">
             <div class="row">
-                <div class="col-md-2 col-sm-4 col-xs-6" v-for="item in items" :key="item.name" style="background:#ee524f; padding:0px; color:white; text-align:center; height:132px; margin:0 10px 10px 0;">
-                    <div style="margin:0; position:absolute; top:50%; left:50%; -ms-transform:translate(-50%, -50%); transform:translate(-50%, -50%);">
-                        <div style="display:inline-block;">
-                            <div style="width:50px; height:50px; display:flex; justify-content:center; align-items:center;">
-                                <img :src="item.iconUrl" style="max-width:50px; max-height:50px;" />
+                <div class="col-lg-1 col-md-2 col-xs-4" v-for="item in purchase" :key="item.name" style="padding:5px; text-align:center; height:130px;">
+                    <button style="width:100%; height:100%; color:white; background:#ee524f; border:0px;">
+                        <div style="margin:0; position:absolute; top:50%; left:50%; -ms-transform:translate(-50%,-50%); transform:translate(-50%,-50%);">
+                            <div style="display:inline-block;">
+                                <div style="width:55px; height:55px; display:flex; justify-content:center; align-items:center;">
+                                    <img :src="item.iconUrl" style="max-width:50px; max-height:50px;" />
+                                </div>
+                            </div><br />
+                            <div style="display:inline-block; font-style:bold; height:15px; margin:0px;">
+                                {{ item.displayName }}
+                            </div><br />
+                            <div style="display:inline-block; font-style:italic; height:15px; margin:0px;">
+                                {{ item.specification }}
                             </div>
-                        </div><br />
-                        <b>{{ item.displayName }}</b><br />
-                        {{ item.specification }}
-                    </div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-1 col-md-2 col-xs-4" v-for="item in recently" :key="item.name" style="padding:5px; text-align:center; height:130px;">
+                    <button style="width:100%; height:100%; color:white; background:#4faba2; border:0px;">
+                        <div style="margin:0; position:absolute; top:50%; left:50%; -ms-transform:translate(-50%,-50%); transform:translate(-50%,-50%);">
+                            <div style="display:inline-block;">
+                                <div style="width:55px; height:55px; display:flex; justify-content:center; align-items:center;">
+                                    <img :src="item.iconUrl" style="max-width:50px; max-height:50px;" />
+                                </div>
+                            </div><br />
+                            <div style="display:inline-block; font-style:bold; height:15px; margin:0px;">
+                                {{ item.displayName }}
+                            </div><br />
+                            <div style="display:inline-block; font-style:italic; height:15px; margin:0px;">
+                                {{ item.specification }}
+                            </div>
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>

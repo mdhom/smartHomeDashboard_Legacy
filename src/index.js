@@ -94,7 +94,27 @@ const start = {
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <tasks-component :eventbus="eventbus"></tasks-component>
             </div>
-            <div class="col-md-6 col-sm-6 col-xs-12">
+        </div>
+    </div>`
+}
+
+const shopping = {
+    data: function() {
+        return {
+            name: "Shopping",
+            initiallyLoaded: false,
+        }
+    },
+    props: {
+        eventbus: Object,
+    },
+    created: function(){
+        eventbus.emitEventListeners('action', `{ "type": "refresh", "page": "${name}" }`);
+    },
+    template: `
+    <div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
                 <shopping-component :eventbus="eventbus"></shopping-component>
             </div>
         </div>
@@ -113,6 +133,14 @@ const routes = [
     { 
         path: '/rooms',   
         name: 'Rooms', 
+        component: rooms, 
+        props: { 
+            eventbus: eventbus 
+        } 
+    },
+    { 
+        path: '/shopping',   
+        name: 'Shopping', 
         component: rooms, 
         props: { 
             eventbus: eventbus 
