@@ -10,3 +10,10 @@ function pad(n, width, z) {
     n = n + '';
     return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 }
+
+function toTimeString(d) {
+    const hour     = pad(d.getHours(), 2);
+    const minute   = pad(d.getMinutes(), 2);
+    const second   = pad(d.getSeconds(), 2);
+    return `${hour}:${minute}:${second}`;
+}

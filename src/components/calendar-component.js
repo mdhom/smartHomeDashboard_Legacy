@@ -74,6 +74,7 @@ Vue.component('calendar-component', {
             fullDayEventsTomorrow: [],
             todayString: "",
             tomorrowString: "",
+            lastData: ""
         }
     },
     props: {
@@ -82,7 +83,7 @@ Vue.component('calendar-component', {
     methods: {
       refreshData: function(sender){
         $(".dropdown").removeClass("open");
-        eventbus.emitEventListeners('action', `{ "type": "refreshCalendar" }`);
+        eventbus.emitEventListeners('action', `{ "type": "refreshData", "source": "calendar" }`);
         console.log("refreshing calendar");
       }
     },
@@ -91,6 +92,12 @@ Vue.component('calendar-component', {
     
         this.eventbus.addEventListener("events", function(data){
             var events = data.payload;
+
+            if (!events) {
+              return;
+            }
+
+            comp.lastData = toTimeString(new Date());
 
             var eventsView = [];
             events.forEach(function(event)
@@ -184,7 +191,11 @@ Vue.component('calendar-component', {
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a v-on:click.stop="refreshData">Refresh data</a>
+              <li>
+                <a v-on:click.stop="refreshData">Refresh data</a>
+              </li>
+              <li>
+                  <span style="padding:3px 20px;">Last data: {{ lastData }}</span>
               </li>
             </ul>
           </li>

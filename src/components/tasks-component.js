@@ -2,15 +2,18 @@
         data: function() {
             return {
                 tasks: [],
+                lastData: ""
             }
         },
         props: {
             eventbus: Object,
         },
         methods: {
-        refreshData: function(sender){
-            console.log("refresh" + sender);
-        }
+            refreshData: function(sender){
+                $(".dropdown").removeClass("open");
+                eventbus.emitEventListeners('action', `{ "type": "refreshData", "source": "tasks" }`);
+                console.log("refreshing tasks");
+            }
         },
         created: function() {
             const comp = this;
@@ -18,6 +21,7 @@
             console.log("Created");
         
             this.eventbus.addEventListener("tasks", function(data){
+                comp.lastData = toTimeString(new Date());
                 comp.tasks = data.payload;
             }); 
         },
@@ -29,9 +33,15 @@
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
                     <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                    <ul class="dropdown-menu" role="menu">
-                    </ul>
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                      <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a v-on:click.stop="refreshData">Refresh data</a>
+                        </li>
+                        <li>
+                            <span style="padding:3px 20px;">Last data: {{ lastData }}</span>
+                        </li>
+                      </ul>
                     </li>
                 </ul>
                 <div class="clearfix"></div>

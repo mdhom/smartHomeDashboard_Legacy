@@ -121,6 +121,7 @@ Vue.component('weather-component', {
             currentWeather: {},
             weatherForecastDaily: [],
             weatherForecastHourly: [],
+            lastData: ""
         }
     },
     computed: {
@@ -131,6 +132,13 @@ Vue.component('weather-component', {
     props: {
         eventbus: Object,
     },
+    methods: {
+      refreshData: function(sender){
+        $(".dropdown").removeClass("open");
+        eventbus.emitEventListeners('action', `{ "type": "refreshData", "source": "weather" }`);
+        console.log("refreshing weather");
+      }
+    },
     updated: function() {
         init_skycons();
         init_hourlyForecast(this);
@@ -139,6 +147,7 @@ Vue.component('weather-component', {
         const comp = this;
 
         comp.eventbus.addEventListener("weather", function(data){
+            comp.lastData = toTimeString(new Date());
             comp.currentWeather = toWeatherObject(data.payload.current);
 
             var forecasts = data.payload.daily.slice(1, 7).map((d, index) => {
@@ -179,10 +188,12 @@ Vue.component('weather-component', {
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="#">Settings 1</a>
-              </li>
-              <li><a href="#">Settings 2</a>
-              </li>
+                <li>
+                    <a v-on:click.stop="refreshData">Refresh data</a>
+                </li>
+                <li>
+                    <span style="padding:3px 20px;">Last data: {{ lastData }}</span>
+                </li>
             </ul>
           </li>
           <li><a class="close-link"><i class="fa fa-close"></i></a>
