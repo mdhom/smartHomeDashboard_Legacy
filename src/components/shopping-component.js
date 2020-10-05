@@ -9,9 +9,9 @@ Vue.component('shopping-component', {
         eventbus: Object,
     },
     methods: {
-    refreshData: function(sender){
-        console.log("refresh" + sender);
-    }
+        refreshData: function(sender){
+            console.log("refresh" + sender);
+        }
     },
     created: function() {
         const comp = this;

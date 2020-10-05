@@ -141,7 +141,7 @@ const routes = [
     { 
         path: '/shopping',   
         name: 'Shopping', 
-        component: rooms, 
+        component: shopping, 
         props: { 
             eventbus: eventbus 
         } 
