@@ -94,6 +94,9 @@ const start = {
             <div class="col-md-6 col-sm-6 col-xs-12">
                 <tasks-component :eventbus="eventbus"></tasks-component>
             </div>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <shopping-component :eventbus="eventbus"></shopping-component>
+            </div>
         </div>
     </div>`
 }
