@@ -81,7 +81,9 @@ Vue.component('calendar-component', {
     },
     methods: {
       refreshData: function(sender){
-        console.log("refresh" + sender);
+        $(".dropdown").removeClass("open");
+        eventbus.emitEventListeners('action', `{ "type": "refreshCalendar" }`);
+        console.log("refreshing calendar");
       }
     },
     created: function() {
